@@ -1,0 +1,65 @@
+CSV_SAVE_PATH: "./results/KITTI_FRCNN_R101_FPN_3x_KNN_results.csv"
+
+CONTROLLER:
+    WEIFHTS_DIR_PATH: './weights'
+    WEIFHTS_FILE_PATH: 'weights/controller.ckpt'
+    NUM_LAYERS: 1             # number of layers of the state space
+    MAX_TRIALS: 300           # maximum number of models generated
+    EXPLORATION: 0.8          # high exploration for the first 20 steps
+    REGULARIZATION: 1e-3      # regularization strength
+    CONTROLLER_CELLS: 60      # number of cells in RNN controller
+    EMBEDDING_DIM: 20         # dimension of the embeddings for each state
+    RESTORE_CONTROLLER: True  # restore controller to continue training
+    EXPLORATION_DIS_FACTOR: 0.99
+
+
+MANAGER:
+    ACCURACY_BETA: 0.8           # beta value for the moving average of the accuracy
+    CLIP_REWARDS: 0.0            # clip rewards in the [-0.05, 0.05] range
+
+    DATASET:
+      CLASS_NAME_FILE: "./data/KITTI/class.names"
+      IS_DETECTRON: True
+      EVAL_FILE: "./data/KITTI/kitti_eval.pkl"
+      DETECTRON_GT_FILE: "./data/KITTI/detectron2_results/kitti_detectron2_gt_dict.pkl"
+      DETECTRON_EVAL_FILE: "./data/KITTI/detectron2_results/kitti_faster_rcnn_R_101_FPN_3x.pkl"
+
+    CLASSIDX:
+      TRUTH: [0]
+      PRED: [2]
+
+
+MATCHER:
+    TYPE: "KnnMatcher"
+    SCENE_FILE: "./data/KITTI/kitti_scene.txt"
+    BATCH_NUM: 10
+    SCENE_SCOPE: [20, 16, 3.3, 35, 6.28]
+    SCENE_INDEX: [2, 3, 4, 5, 6]
+
+
+SEARCHSPACE:
+    NUM_LAYERS: 5
+    LAYER_NAMES: ['car', 'person', 'truncation',
+                  'occlusion', 'Camera_rotation'
+                  ]
+    LAYER_VALUES: [[0, 4, 8, 12, 16, 20],
+                   [0, 4, 8, 12, 16],
+                   [0, 1.1, 2.2, 3.3],
+                   [0, 7, 14, 21, 28, 35],
+                   [-3.14, -1.07, 0, 1.07, 3.14],
+                   ]
+
+
+TRAIN:
+    HISTORY_STORE: True
+    HISTORY_FILE: 'train_history.csv'
+    BUFFER_FILE: 'buffers.txt'
+
+EVAL:
+    GT_FLAG: True
+    RS_FLAG: True
+    GT:
+      SAVE_PATH: "./results/GT/GT_KITTI_FRCNN_R101_FPN_3x_KNN.csv"
+    RS:
+      RS_PATH: "./results/IV_results/KITTI_FRCNN_R101_FPN_3x_KNN.csv"
+      SAVE_PATH: "./results/GT/RS_KITTI_FRCNN_R101_FPN_3x_KNN.csv"

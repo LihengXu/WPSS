@@ -1,0 +1,79 @@
+CSV_SAVE_PATH: "./results/EVB17_YOLO_KNN_results.csv"
+
+CONTROLLER:
+    WEIFHTS_DIR_PATH: './weights'
+    WEIFHTS_FILE_PATH: 'weights/controller.ckpt'
+    NUM_LAYERS: 1             # number of layers of the state space
+    MAX_TRIALS: 300           # maximum number of models generated
+    EXPLORATION: 0.8          # high exploration for the first 20 steps
+    REGULARIZATION: 1e-3      # regularization strength
+    CONTROLLER_CELLS: 60      # number of cells in RNN controller
+    EMBEDDING_DIM: 20         # dimension of the embeddings for each state
+    RESTORE_CONTROLLER: True  # restore controller to continue training
+    EXPLORATION_DIS_FACTOR: 0.99
+
+
+MANAGER:
+    ACCURACY_BETA: 0.8           # beta value for the moving average of the accuracy
+    CLIP_REWARDS: 0.0            # clip rewards in the [-0.05, 0.05] range
+
+    DATASET:
+      CLASS_NAME_FILE: "./data/EVB/class.names"
+      IS_DETECTRON: False
+      EVAL_FILE: "./data/EVB/YOLOv3_eval.pkl"
+      DETECTRON_GT_FILE: ""
+      DETECTRON_EVAL_FILE: ""
+
+    CLASSIDX:
+      TRUTH: [0, 6, 8]
+      PRED: [2, 5, 7]
+
+
+MATCHER:
+    TYPE: "KnnMatcher"
+    SCENE_FILE: "./data/EVB/merge_scene17.txt"
+    BATCH_NUM: 5
+    SCENE_SCOPE: [4, 2, 5, 1, 1, 1, 1, 1, 1, 36, 6, 25, 12, 6, 7, 18, 57]
+    SCENE_INDEX: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+
+
+SEARCHSPACE:
+    NUM_LAYERS: 17
+    LAYER_NAMES: ['road', 'time', 'weather', 'scene-tunnel', 'scene-intersection',
+                  'scene-construction', 'scene-construction', 'scene-rail',
+                  'scene-toll', 'scene-viaduct', 'car', 'motor', 'person', 'truck',
+                  'tricycle', 'bus', 'truncation', 'occlusion'
+                  ]
+    LAYER_VALUES: [[0, 1, 2, 3, 4],
+                   [0, 1, 2],
+                   [0, 1, 2, 3, 4, 5],
+                   [0, 1],
+                   [0, 1],
+                   [0, 1],
+                   [0, 1],
+                   [0, 1],
+                   [0, 1],
+                   [0, 4, 8, 12, 16, 20, 24, 28, 32, 36],
+                   [0, 2, 4, 6],
+                   [0, 5, 10, 15, 20, 25],
+                   [0, 4, 8, 12],
+                   [0, 2, 4, 6],
+                   [0, 2, 5, 7],
+                   [0, 3, 6, 9, 12, 15, 18],
+                   [0, 9, 19, 28, 38, 47, 57],
+                   ]
+
+
+TRAIN:
+    HISTORY_STORE: True
+    HISTORY_FILE: 'train_history.csv'
+    BUFFER_FILE: 'buffers.txt'
+
+EVAL:
+    GT_FLAG: True
+    RS_FLAG: True
+    GT:
+      SAVE_PATH: "./results/GT/GT_EVB17_YOLO_KNN.csv"
+    RS:
+      RS_PATH: "./results/IV_results/EVB17_YOLO_KNN.csv"
+      SAVE_PATH: "./results/GT/RS_EVB17_YOLO_KNN.csv"

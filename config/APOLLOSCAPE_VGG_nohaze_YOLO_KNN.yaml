@@ -1,0 +1,121 @@
+CSV_SAVE_PATH: "./results/Haze_results/APOLLOSCAPE_VGG_nohaze_YOLO_KNN.csv"
+
+SNENARIOPOOL:
+    FLAG: False
+
+CONTROLLER:
+    WEIFHTS_DIR_PATH: './weights'
+    WEIFHTS_FILE_PATH: 'weights/controller.ckpt'
+    NUM_LAYERS: 1             # number of layers of the state space
+    MAX_TRIALS: 200           # maximum number of models generated
+    EXPLORATION: 0.8          # high exploration for the first 20 steps
+    REGULARIZATION: 1e-3      # regularization strength
+    CONTROLLER_CELLS: 60      # number of cells in RNN controller
+    EMBEDDING_DIM: 20         # dimension of the embeddings for each state
+    RESTORE_CONTROLLER: True  # restore controller to continue training
+    EXPLORATION_DIS_FACTOR: 0.99
+
+
+MANAGER:
+    ACCURACY_BETA: 0.8           # beta value for the moving average of the accuracy
+    CLIP_REWARDS: 0.0            # clip rewards in the [-0.05, 0.05] range
+
+    DATASET:
+      CLASS_NAME_FILE: "./data/APOLLPSCAPE/class.names"
+      IS_DETECTRON: False
+      EVAL_FILE: "./data/APOLLPSCAPE/resize_eval.pkl"
+      DETECTRON_GT_FILE: ""
+      DETECTRON_EVAL_FILE: ""
+
+    CLASSIDX:
+      TRUTH: [33, 39, 38]
+      PRED: [2, 5, 7]
+
+
+MATCHER:
+    TYPE: "KnnMatcher"
+    SCENE_FILE: "./data/APOLLPSCAPE/VGG_KNN/resize_nohaze_KNN.txt"
+    BATCH_NUM: 10
+    SCENE_SCOPE: [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.8, 1.5, 1.6, 1.4, 1.4,
+                  1.1, 1.2, 1.0, 1.2, 1.3,
+                  1.1, 1.1, 1.1, 1.0, 1.1,
+                  1.1, 0.8, 1.0, 0.8, 1.0,
+                  0.8, 1.0, 0.8, 0.8, 0.9
+    ]
+
+    SCENE_INDEX: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                  11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                  21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+    ]
+
+    RERANKING:
+      MODE: "VGG"
+      HAZE: False
+      LAMB: 0.3
+      PRERANK: "./data/APOLLPSCAPE/VGG_prerank/resize_prerank.npy"
+      INS_GALFEA: "./data/APOLLPSCAPE/VGG_prerank/resize_ins_galFea_scaled.npy"
+      PCA_GALFEA: "./data/APOLLPSCAPE/VGG_prerank/resize_pca_galFea_d.npy"
+
+
+
+SEARCHSPACE:
+    NUM_LAYERS: 30
+    LAYER_NAMES: ['vehicle', 'person', 'non-motor', 'group', 'haze',
+                  'VGG1', 'VGG2', 'VGG3', 'VGG4', 'VGG5',
+                  'VGG6', 'VGG7', 'VGG8', 'VGG9', 'VGG10',
+                  'VGG11', 'VGG12', 'VGG13', 'VGG14', 'VGG15',
+                  'VGG16', 'VGG17', 'VGG18', 'VGG19', 'VGG20',
+                  'VGG21', 'VGG22', 'VGG23', 'VGG24', 'VGG25',
+                  ]
+    LAYER_VALUES: [[0.0,0.1667,0.3333,0.5,0.6667,0.8333,1.0],                                                           # [round(x/6, 4) for x in range(0, 7)]
+                   [ 0.0,0.0769,0.1538,0.2308,0.3077,0.3846,0.4615,0.5385,0.6154,0.6923,0.7692,0.8462,0.9231,1.0],      # [round(x/13, 4) for x in range(0, 14)]
+                   [0.0,0.1667,0.3333,0.5,0.6667,0.8333,1.0],                                                           # [round(x/6, 4) for x in range(0, 7)]
+                   [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],                                                       # [round(x/10, 4) for x in range(0, 11)]
+                   [0.0],                                                                                                 # [round(x, 4) for x in range(0, 1)] (nohaze)
+
+                   [-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],              # [round(0.1*x, 4) for x in range(-9, 10, 1)]
+                   [-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],                             # [round(0.1*x, 4) for x in range(-6, 10, 1)]
+                   [-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8],                       # [round(0.1*x, 4) for x in range(-8, 9, 1)]
+                   [-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                               # [round(0.1*x, 4) for x in range(-8, 7, 1)]
+                   [-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                # [round(0.1*x, 4) for x in range(-7, 8, 1)]
+
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                          # [round(0.1*x, 4) for x in range(-5, 8, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                                  # [round(0.1*x, 4) for x in range(-5, 6, 1)]
+                   [-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                         # [round(0.1*x, 4) for x in range(-6, 7, 1)]
+                   [-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                    # [round(0.1*x, 4) for x in range(-7, 7, 1)]
+
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                                   # [round(0.1*x, 4) for x in range(-4, 7, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                                  # [round(0.1*x, 4) for x in range(-5, 6, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                                  # [round(0.1*x, 4) for x in range(-5, 6, 1)]
+
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                                  # [round(0.1*x, 4) for x in range(-5, 6, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4, 0.5],                                                      # [round(0.1*x, 4) for x in range(-4, 6, 1)]
+                   ]
+
+
+TRAIN:
+    HISTORY_STORE: True
+    HISTORY_FILE: 'train_history.csv'
+    BUFFER_FILE: 'buffers.txt'
+
+EVAL:
+    GT_FLAG: True
+    RS_FLAG: False
+    GT:
+      SAVE_PATH: "./results/GT/GT_APOLLOSCAPE_VGG_nohaze_YOLO_KNN.csv"
+    RS:
+      RS_PATH: "./results/Haze_results/APOLLOSCAPE_VGG_nohaze_YOLO_KNN.csv"
+      SAVE_PATH: "./results/GT/RS_APOLLOSCAPE_VGG_nohaze_YOLO_KNN.csv"
