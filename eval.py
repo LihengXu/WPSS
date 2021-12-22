@@ -46,7 +46,18 @@ def parse_args():
         # default="./config/APOLLOSCAPE_CODE_nohaze_YOLO_KNN.yaml",
 
         # default="./config/APOLLOSCAPE_VGG_haze_YOLO_KNN.yaml",
-        default="./config/APOLLOSCAPE_CODE_haze_YOLO_KNN.yaml",
+        # default="./config/APOLLOSCAPE_CODE_haze_YOLO_KNN.yaml",
+
+        # default="./config/SEMI_APOLLOSCAPE_VGG_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_REPEAT_APOLLOSCAPE_VGG_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_ORI_APOLLOSCAPE_VGG_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_ORI_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_MANUAL_APOLLOSCAPE_VGG_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_MANUAL_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.yaml",
+        default="./config/SEMI_MANUAL_REPEAT_APOLLOSCAPE_VGG_nohaze_YOLO_PEOXY_RERANK.yaml",
+        # default="./config/SEMI_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.yaml",
 
         type=str,
     )

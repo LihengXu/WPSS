@@ -112,5 +112,5 @@ logs/*
 # Weights
 weights/*
 
-# large file
-*.rar
+# Data
+data/*

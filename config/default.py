@@ -32,6 +32,8 @@ def get_defaults_cfg():
     cfg.MANAGER.CLIP_REWARDS = 0.0            # clip rewards in the [-0.05, 0.05] range
     cfg.MANAGER.DATASET = CfgNode()
     cfg.MANAGER.DATASET.CLASS_NAME_FILE = "./data/EVB/class.names"
+    cfg.MANAGER.DATASET.SIZE = 5773
+    cfg.MANAGER.DATASET.MODE = "RAMDOM"
     cfg.MANAGER.DATASET.IS_DETECTRON = False
     cfg.MANAGER.DATASET.EVAL_FILE = ""
     cfg.MANAGER.DATASET.DETECTRON_GT_FILE = ""
@@ -54,6 +56,12 @@ def get_defaults_cfg():
     cfg.MATCHER.RERANKING.INS_GALFEA = ""
     cfg.MATCHER.RERANKING.PCA_GALFEA = ""
     cfg.MATCHER.RERANKING.CC_GALFEA = ""
+    cfg.MATCHER.SEMI_REPEAT = True
+
+    cfg["DISCRIMINATOR"] = CfgNode()
+    cfg.DISCRIMINATOR.TYPE = "BaseDiscriminator"
+    cfg.DISCRIMINATOR.ALPHA = 0.8
+    cfg.DISCRIMINATOR.BETA = 0.0
 
     cfg["SEARCHSPACE"] = CfgNode()
     cfg.SEARCHSPACE.NUM_LAYERS = 17
@@ -92,6 +100,8 @@ def get_defaults_cfg():
     cfg.EVAL.RS = CfgNode()
     cfg.EVAL.RS.RS_PATH = ""
     cfg.EVAL.RS.SAVE_PATH = ""
+
+    cfg.EVAL.COHESION_RS_PATH = ""
 
     cfg["SNENARIOPOOL"] = CfgNode()
     cfg.SNENARIOPOOL.FLAG = True

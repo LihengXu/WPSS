@@ -407,7 +407,7 @@ class Controller:
             self.saver = tf.train.Saver(max_to_keep=1)
 
             if self.restore_controller:
-                path = tf.train.latest_checkpoint('weights/')
+                path = tf.train.latest_checkpoint(self.cfg.CONTROLLER.WEIFHTS_DIR_PATH)
 
                 if path is not None and tf.train.checkpoint_exists(path):
                     print("Loading Controller Checkpoint !")

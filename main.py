@@ -2,7 +2,7 @@
 import os
 
 # set the the number of the search
-rerun_num = 100
+rerun_num = 105
 
 if __name__ == "__main__":
 
@@ -11,7 +11,8 @@ if __name__ == "__main__":
         os.remove("./scenario_pool/scenario_pool.csv")
     # start the experiments
     for x in range(rerun_num):
-        os.system("python train.py")
+        # os.system("python train.py")
+        os.system("python train_semi.py")
         print()
         print()
         print("****************************")

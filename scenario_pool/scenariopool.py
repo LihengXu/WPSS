@@ -21,7 +21,7 @@ class ScenarioPool():
     def is_inpool(self, index):
         for scenario in self.scenario_pool:
             intersection = [x for x in scenario if x in index]
-            if len(intersection) > (self.cfg.MATCHER.BATCH_NUM/2):
+            if len(intersection) > (self.cfg.MATCHER.BATCH_NUM / 2):
                 return False
             else:
                 return True
