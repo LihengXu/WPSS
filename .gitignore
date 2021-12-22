@@ -111,6 +111,7 @@ logs/*
 
 # Weights
 weights/*
+weights_copy/*
 
 # Data
 data/*
