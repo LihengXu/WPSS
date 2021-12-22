@@ -1,0 +1,118 @@
+CSV_SAVE_PATH: "./results/semi/search/SEMI_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.csv"
+
+SNENARIOPOOL:
+    FLAG: False
+
+CONTROLLER:
+    WEIFHTS_DIR_PATH: './weights'
+    WEIFHTS_FILE_PATH: 'weights/controller.ckpt'
+    NUM_LAYERS: 1             # number of layers of the state space
+    MAX_TRIALS: 200           # maximum number of models generated
+    EXPLORATION: 0.8          # high exploration for the first 20 steps
+    REGULARIZATION: 1e-3      # regularization strength
+    CONTROLLER_CELLS: 60      # number of cells in RNN controller
+    EMBEDDING_DIM: 20         # dimension of the embeddings for each state
+    RESTORE_CONTROLLER: True  # restore controller to continue training
+    EXPLORATION_DIS_FACTOR: 0.99
+
+
+MANAGER:
+    ACCURACY_BETA: 0.8           # beta value for the moving average of the accuracy
+    CLIP_REWARDS: 0.0            # clip rewards in the [-0.05, 0.05] range
+
+    DATASET:
+      CLASS_NAME_FILE: "./data/APOLLPSCAPE/class.names"
+      SIZE: 5773
+      MODE: "MANUAL"
+      IS_DETECTRON: False
+      EVAL_FILE: "./data/APOLLPSCAPE/resize_eval.pkl"
+      DETECTRON_GT_FILE: ""
+      DETECTRON_EVAL_FILE: ""
+
+    CLASSIDX:
+      TRUTH: [33, 39, 38]
+      PRED: [2, 5, 7]
+
+
+MATCHER:
+    TYPE: "ProxyRerankingMatcher"
+    SCENE_FILE: ""
+    BATCH_NUM: 10
+    SCENE_SCOPE: []
+    SCENE_INDEX: []
+
+    SEMI_REPEAT: True
+
+    RERANKING:
+      MODE: "CODE"
+      HAZE: False
+      LAMB: 0.3
+      PRERANK: "./data/APOLLPSCAPE/Code_prerank/semi_code_preranking_all_5772.npy"
+      INS_GALFEA: "./data/APOLLPSCAPE/Code_prerank/resize_ins_galFea_scaled.npy"
+      CC_GALFEA: "./data/APOLLPSCAPE/Code_prerank/pca_content_code_scaled.pkl"
+
+
+
+
+
+SEARCHSPACE:
+    NUM_LAYERS: 30
+    LAYER_NAMES: ['vehicle', 'person', 'non-motor', 'group', 'haze',
+                  'CODE1', 'CODE2', 'CODE3', 'CODE4', 'CODE5',
+                  'CODE6', 'CODE7', 'CODE8', 'CODE9', 'CODE10',
+                  'CODE11', 'CODE12', 'CODE13', 'CODE14', 'CODE15',
+                  'CODE16', 'CODE17', 'CODE18', 'CODE19', 'CODE20',
+                  'CODE21', 'CODE22', 'CODE23', 'CODE24', 'CODE25',
+                  ]
+    LAYER_VALUES: [[0.0,0.1667,0.3333,0.5,0.6667,0.8333,1.0],                                                           # [round(x/6, 4) for x in range(0, 7)]
+                   [ 0.0,0.0769,0.1538,0.2308,0.3077,0.3846,0.4615,0.5385,0.6154,0.6923,0.7692,0.8462,0.9231,1.0],      # [round(x/13, 4) for x in range(0, 14)]
+                   [0.0,0.1667,0.3333,0.5,0.6667,0.8333,1.0],                                                           # [round(x/6, 4) for x in range(0, 7)]
+                   [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0],                                                       # [round(x/10, 4) for x in range(0, 11)]
+                   [0.0],                                                                                                 # [round(x, 4) for x in range(0, 1)] (nohaze)
+
+                   [-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],              # [round(0.1*x, 4) for x in range(-9, 10, 1)]
+                   [-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9],                   # [round(0.1*x, 4) for x in range(-8, 10, 1)]
+                   [-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                # [round(0.1*x, 4) for x in range(-7, 8, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                          # [round(0.1*x, 4) for x in range(-5, 8, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                              # [round(0.1*x, 4) for x in range(-5, 7, 1)]
+
+                   [-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6],                                         # [round(0.1*x, 4) for x in range(-6, 7, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                          # [round(0.1*x, 4) for x in range(-5, 8, 1)]
+                   [-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                # [round(0.1*x, 4) for x in range(-7, 8, 1)]
+                   [-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],                                     # [round(0.1*x, 4) for x in range(-6, 8, 1)]
+                   [-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                             # [round(0.1*x, 4) for x in range(-6, 6, 1)]
+
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4,0.5],                                                       # [round(0.1*x, 4) for x in range(-4, 6, 1)]
+                   [-0.5,-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                      # [round(0.1*x, 4) for x in range(-5, 5, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                                # [round(0.1*x, 4) for x in range(-3, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                           # [round(0.1*x, 4) for x in range(-4, 5, 1)]
+                   [-0.4,-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3],                                                               # [round(0.1*x, 4) for x in range(-4, 4, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                                # [round(0.1*x, 4) for x in range(-3, 5, 1)]
+
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3,0.4],                                                                # [round(0.1*x, 4) for x in range(-3, 5, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3],                                                                    # [round(0.1*x, 4) for x in range(-3, 4, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3],                                                                    # [round(0.1*x, 4) for x in range(-3, 4, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3],                                                                    # [round(0.1*x, 4) for x in range(-3, 4, 1)]
+                   [-0.3,-0.2,-0.1,0.0,0.1,0.2,0.3],                                                                    # [round(0.1*x, 4) for x in range(-3, 4, 1)]
+                   ]
+
+
+TRAIN:
+    HISTORY_STORE: True
+    HISTORY_FILE: 'train_history.csv'
+    BUFFER_FILE: 'buffers.txt'
+
+EVAL:
+    GT_FLAG: False
+    RS_FLAG: True
+    GT:
+      SAVE_PATH: "./results/GT/GT_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK_noscenariopool.csv"
+    RS:
+      RS_PATH: "./results/semi/search/SEMI_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK.csv"
+      SAVE_PATH: "./results/semi/eval/RS_SEMI_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK_noscenariopool.csv"
+    COHESION_RS_PATH: "./results/semi/cohesion/RS_SEMI_MANUAL_REPEAT_APOLLOSCAPE_CODE_nohaze_YOLO_PEOXY_RERANK_noscenariopool.csv"
