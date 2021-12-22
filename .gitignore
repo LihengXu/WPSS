@@ -114,3 +114,8 @@ weights/*
 
 # Data
 data/*
+!data/data.md
+
+# Results
+results/*
+!results/results.md
